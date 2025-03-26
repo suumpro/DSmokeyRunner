@@ -7,7 +7,7 @@ import './App.css'
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([])
   const [testOutput, setTestOutput] = useState<string>('')
-  const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'complete'>('idle')
+  const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'complete' | 'error'>('idle')
   const [testSummary, setTestSummary] = useState<{
     total: number;
     passed: number;
@@ -24,10 +24,10 @@ function App() {
   }
 
   const handleTestComplete = (result: any) => {
-    setTestStatus('complete')
+    setTestStatus(result.success ? 'complete' : 'error')
     setTestOutput(result.output || '')
     
-    if (result.success && result.summary) {
+    if (result.summary) {
       setTestSummary(result.summary)
     }
 
@@ -45,10 +45,11 @@ function App() {
         setTestOutput(entry.output || '')
         setTestSummary(entry.summary)
         setSelectedFiles(entry.testFiles)
-        setTestStatus('complete')
+        setTestStatus(entry.status === 'passed' ? 'complete' : 'error')
       })
       .catch(error => {
         console.error('Failed to fetch run details:', error)
+        setTestStatus('error')
       })
   }
 
@@ -73,39 +74,60 @@ function App() {
         </div>
 
         <div className="output-panel">
-          <div className="output-header">
+          <div className={`output-header ${testStatus}`}>
             <h2>Test Output</h2>
             {testSummary && (
               <div className="test-summary">
                 <div className="summary-item total">
-                  Total: {testSummary.total}
+                  <span className="summary-label">Total Tests</span>
+                  <span className="summary-value">{testSummary.total}</span>
                 </div>
                 <div className="summary-item passed">
-                  Passed: {testSummary.passed}
+                  <span className="summary-label">Passed</span>
+                  <span className="summary-value">{testSummary.passed}</span>
                 </div>
                 <div className="summary-item failed">
-                  Failed: {testSummary.failed}
+                  <span className="summary-label">Failed</span>
+                  <span className="summary-value">{testSummary.failed}</span>
                 </div>
                 <div className="summary-item duration">
-                  Duration: {(testSummary.duration / 1000).toFixed(2)}s
+                  <span className="summary-label">Duration</span>
+                  <span className="summary-value">{(testSummary.duration / 1000).toFixed(2)}s</span>
                 </div>
               </div>
             )}
           </div>
 
           <div className={`output-content ${testStatus}`}>
-            {testStatus === 'running' && !testOutput && (
+            {testStatus === 'running' && (
               <div className="loading-indicator">
-                Running tests...
                 <div className="loading-spinner"></div>
+                <p>Running tests...</p>
+                <p className="loading-subtitle">This may take a few moments</p>
               </div>
             )}
             {testOutput ? (
-              <pre className="test-output">{testOutput}</pre>
+              <div className="output-wrapper">
+                <pre className="test-output">{testOutput}</pre>
+                {testStatus === 'complete' && (
+                  <div className="success-indicator">
+                    <span className="success-icon">✓</span>
+                    <span>All tests completed successfully</span>
+                  </div>
+                )}
+                {testStatus === 'error' && (
+                  <div className="error-indicator">
+                    <span className="error-icon">⚠</span>
+                    <span>Some tests failed or encountered errors</span>
+                  </div>
+                )}
+              </div>
             ) : (
               testStatus === 'idle' && (
                 <div className="empty-state">
-                  Select test files and click "Run Tests" to begin
+                  <span className="empty-icon">📋</span>
+                  <p>Select test files and click "Run Tests" to begin</p>
+                  <p className="empty-subtitle">Your test results will appear here</p>
                 </div>
               )
             )}
