@@ -15,57 +15,42 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="layout">
-      <nav className="nav">
-        <div className="nav-content">
-          <div className="nav-brand">
-            <Link to="/" className="brand-link">
-              DSmokeyRunner
-            </Link>
-          </div>
-          <div className="nav-links">
-            <Link
-              to="/"
-              className={`nav-link ${isActive('/') ? 'active' : ''}`}
+      <nav className="navbar">
+        <div className="nav-brand">
+          <Link to="/">DSmokeyRunner</Link>
+        </div>
+        <ul className="nav-links">
+          <li>
+            <Link 
+              to="/" 
+              className={isActive('/') ? 'active' : ''}
             >
-              Start
+              Test Files
             </Link>
-            <Link
-              to="/run"
-              className={`nav-link ${isActive('/run') ? 'active' : ''}`}
+          </li>
+          <li>
+            <Link 
+              to="/run" 
+              className={isActive('/run') ? 'active' : ''}
             >
               Run Tests
             </Link>
-            <Link
-              to="/history"
-              className={`nav-link ${isActive('/history') ? 'active' : ''}`}
+          </li>
+          <li>
+            <Link 
+              to="/history" 
+              className={isActive('/history') ? 'active' : ''}
             >
               History
             </Link>
-          </div>
-          <div className="nav-actions">
-            <button className="theme-toggle">
-              🌙
-            </button>
-            <button className="help-button">
-              ?
-            </button>
-          </div>
-        </div>
+          </li>
+        </ul>
       </nav>
-
       <main className="main-content">
         {children}
       </main>
-
       <footer className="footer">
-        <div className="footer-content">
-          <p>DSmokeyRunner © 2024</p>
-          <div className="footer-links">
-            <a href="#" className="footer-link">Documentation</a>
-            <a href="#" className="footer-link">GitHub</a>
-            <a href="#" className="footer-link">Support</a>
-          </div>
-        </div>
+        <p>DSmokeyRunner - A Playwright-based test runner</p>
       </footer>
     </div>
   );

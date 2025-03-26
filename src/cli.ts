@@ -11,6 +11,7 @@ import {
   clearHistory,
   deleteHistoryEntry
 } from './history';
+import fs from 'fs';
 
 // Define interfaces for better type safety
 interface TestResult {
@@ -65,6 +66,36 @@ app.get('/api/test-files', async (req, res) => {
   } catch (error) {
     console.error('❌ Error scanning test files:', error);
     res.status(500).json({ error: 'Failed to scan test files' });
+  }
+});
+
+// Add new endpoint for file content
+app.get('/api/file-content', async (req, res) => {
+  const filePath = req.query.path as string;
+  
+  if (!filePath) {
+    return res.status(400).json({ error: 'No file path provided' });
+  }
+
+  try {
+    // Ensure the file path is within the tests directory
+    const normalizedPath = path.normalize(filePath);
+    if (!normalizedPath.startsWith('tests/')) {
+      return res.status(403).json({ error: 'Access denied: Can only read files from the tests directory' });
+    }
+
+    const fullPath = path.join(process.cwd(), normalizedPath);
+    
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    console.log('📄 Serving content for file:', normalizedPath);
+    res.json({ content });
+  } catch (error) {
+    console.error('❌ Error reading file:', error);
+    res.status(500).json({ error: 'Failed to read file content' });
   }
 });
 

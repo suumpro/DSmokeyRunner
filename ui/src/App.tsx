@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { StartPage } from './pages/StartPage';
 import { RunPage } from './pages/RunPage';
@@ -8,7 +7,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Layout>
         <Routes>
           <Route path="/" element={<StartPage />} />
@@ -17,7 +16,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
-    </Router>
+    </BrowserRouter>
   );
 }
 
