@@ -5,9 +5,13 @@
   "main": "dist/cli.js",
   "scripts": {
     "start": "ts-node src/cli.ts",
-    "dev": "nodemon --exec ts-node src/cli.ts",
+    "dev": "ts-node-dev --respawn src/cli.ts",
     "build": "tsc",
-    "test": "playwright test"
+    "ui": "cd ui && npm run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run ui\"",
+    "scan": "ts-node src/cli.ts scan",
+    "test": "ts-node src/cli.ts run",
+    "test:scan": "ts-node src/cli.ts scan-run"
   },
   "keywords": [
     "playwright",
@@ -19,15 +23,21 @@
   "dependencies": {
     "@playwright/test": "^1.51.1",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
     "express": "^4.18.3",
-    "playwright": "^1.51.1"
+    "lowdb": "^7.0.1",
+    "playwright": "^1.42.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/lowdb": "^1.0.15",
     "@types/node": "^20.11.24",
-    "nodemon": "^3.1.0",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^8.2.2",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   }
 }
