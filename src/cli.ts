@@ -1,68 +1,105 @@
+import express from 'express';
+import cors from 'cors';
 import { scanTestFiles } from './fileScanner';
 import { runPlaywrightTests } from './testRunner';
+import path from 'path';
 
-async function main() {
-  const args = process.argv.slice(2);
-  const command = args[0];
+const app = express();
 
-  if (!command || command === '--help' || command === '-h') {
-    console.log(`
-DSmokey Runner - Playwright Test Runner CLI
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-Usage:
-  npx ts-node src/cli.ts <command> [options]
+const port = 3001;
 
-Commands:
-  scan <path...>     Scan directories for test files
-  run <path...>      Run Playwright tests for specified files/folders
-  scan-run <path...> Scan directories and run discovered tests
+// Basic root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    message: 'DSmokey Runner API is running',
+    endpoints: {
+      'GET /': 'This info',
+      'GET /api/test-files': 'Get list of test files',
+      'POST /api/run-tests': 'Run specified tests'
+    }
+  });
+});
 
-Examples:
-  npx ts-node src/cli.ts scan ./tests
-  npx ts-node src/cli.ts run ./tests/unit/example.spec.ts
-  npx ts-node src/cli.ts scan-run ./tests
-`);
-    process.exit(0);
+app.get('/api/test-files', async (req, res) => {
+  try {
+    const testFiles = await scanTestFiles(['./tests']);
+    console.log('📁 Found test files:', testFiles);
+    res.json({ testFiles });
+  } catch (error) {
+    console.error('❌ Error scanning test files:', error);
+    res.status(500).json({ error: 'Failed to scan test files' });
   }
+});
 
-  const paths = args.slice(1);
-  if (paths.length === 0) {
-    paths.push('./tests'); // Default to tests directory
+app.post('/api/run-tests', async (req, res) => {
+  const { targets } = req.body;
+  
+  if (!targets || !Array.isArray(targets) || targets.length === 0) {
+    return res.status(400).json({ error: 'No test targets provided' });
   }
 
   try {
-    switch (command) {
-      case 'scan':
-        const files = scanTestFiles(paths);
-        console.log('\nDiscovered test files:');
-        files.forEach(file => console.log(`- ${file}`));
-        break;
+    console.log('🎯 Running tests for targets:', targets);
+    
+    const result = await runPlaywrightTests(targets);
+    
+    console.log('📋 Raw test result:', {
+      success: result.success,
+      output: result.output,
+      outputType: typeof result.output,
+      outputLength: result.output?.length,
+      summary: result.summary,
+      error: result.error
+    });
 
-      case 'run':
-        await runPlaywrightTests(paths);
-        break;
+    // Ensure we have valid data
+    const response = {
+      success: result.success,
+      output: result.output || 'No output received from test run',
+      summary: result.summary || {
+        total: 0,
+        passed: 0,
+        failed: 0,
+        duration: 0
+      }
+    };
 
-      case 'scan-run':
-        const testFiles = scanTestFiles(paths);
-        if (testFiles.length === 0) {
-          console.log('No test files found.');
-          process.exit(0);
-        }
-        await runPlaywrightTests(testFiles);
-        break;
-
-      default:
-        console.error(`Unknown command: ${command}`);
-        process.exit(1);
-    }
+    console.log('📤 Sending response:', response);
+    
+    res.json(response);
   } catch (error) {
-    console.error('Error:', error);
-    process.exit(1);
+    console.error('❌ Test run error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to run tests',
+      output: error instanceof Error ? error.stack || error.message : 'Unknown error occurred',
+      summary: {
+        total: 0,
+        passed: 0,
+        failed: 0,
+        duration: 0
+      }
+    });
   }
-}
+});
 
-// Run the CLI
-main().catch(error => {
-  console.error('Fatal error:', error);
-  process.exit(1);
+// Start server
+app.listen(port, () => {
+  console.log(`
+🚀 DSmokey Runner Server is running!
+   
+   URL: http://localhost:${port}
+   
+   Available endpoints:
+   - GET  /                 → API info
+   - GET  /api/test-files   → List test files
+   - POST /api/run-tests    → Execute tests
+   
+   Server is ready to accept requests...
+`);
 }); 
