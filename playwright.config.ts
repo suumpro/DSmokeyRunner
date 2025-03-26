@@ -1,18 +1,21 @@
-import { defineConfig } from '@playwright/test';
+import { PlaywrightTestConfig } from '@playwright/test';
 
-export default defineConfig({
+const config: PlaywrightTestConfig = {
   testDir: './tests',
   timeout: 30000,
   reporter: 'list',
   use: {
     headless: true,
     viewport: { width: 1280, height: 720 },
-    screenshot: 'only-on-failure',
   },
   projects: [
     {
       name: 'chromium',
-      use: { browserName: 'chromium' },
+      use: {
+        browserName: 'chromium',
+      },
     },
   ],
-}); 
+};
+
+export default config;

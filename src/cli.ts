@@ -1,68 +1,51 @@
-import { scanTestFiles } from './fileScanner';
+import express from 'express';
+import cors from 'cors';
 import { runPlaywrightTests } from './testRunner';
 
-async function main() {
-  const args = process.argv.slice(2);
-  const command = args[0];
+const app = express();
+const port = 3001;
 
-  if (!command || command === '--help' || command === '-h') {
-    console.log(`
-DSmokey Runner - Playwright Test Runner CLI
+app.use(cors());
+app.use(express.json());
 
-Usage:
-  npx ts-node src/cli.ts <command> [options]
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'DSmokeyRunner API is running' });
+});
 
-Commands:
-  scan <path...>     Scan directories for test files
-  run <path...>      Run Playwright tests for specified files/folders
-  scan-run <path...> Scan directories and run discovered tests
+// Get list of test files
+app.get('/api/test-files', (req, res) => {
+  // TODO: Implement dynamic test file discovery
+  const testFiles = ['tests/integration/login.spec.js'];
+  res.json({ testFiles });
+});
 
-Examples:
-  npx ts-node src/cli.ts scan ./tests
-  npx ts-node src/cli.ts run ./tests/unit/example.spec.ts
-  npx ts-node src/cli.ts scan-run ./tests
-`);
-    process.exit(0);
-  }
-
-  const paths = args.slice(1);
-  if (paths.length === 0) {
-    paths.push('./tests'); // Default to tests directory
-  }
-
+// Run tests endpoint
+app.post('/api/run-tests', async (req, res) => {
   try {
-    switch (command) {
-      case 'scan':
-        const files = scanTestFiles(paths);
-        console.log('\nDiscovered test files:');
-        files.forEach(file => console.log(`- ${file}`));
-        break;
-
-      case 'run':
-        await runPlaywrightTests(paths);
-        break;
-
-      case 'scan-run':
-        const testFiles = scanTestFiles(paths);
-        if (testFiles.length === 0) {
-          console.log('No test files found.');
-          process.exit(0);
-        }
-        await runPlaywrightTests(testFiles);
-        break;
-
-      default:
-        console.error(`Unknown command: ${command}`);
-        process.exit(1);
-    }
+    console.log('Received request to run tests:', req.body);
+    const result = await runPlaywrightTests(req.body.testFiles);
+    console.log('Test execution completed:', result);
+    res.json({
+      success: true,
+      output: result.output,
+      summary: {
+        total: result.totalTests,
+        passed: result.passedTests,
+        failed: result.failedTests,
+        duration: result.duration
+      }
+    });
   } catch (error) {
-    console.error('Error:', error);
-    process.exit(1);
+    console.error('Error running tests:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      output: error.output || 'No output available'
+    });
   }
-}
+});
 
-// Run the CLI
-main().catch(error => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-}); 
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

@@ -1,10 +1,10 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('Login Flow', () => {
-  test('should login successfully with valid credentials', async ({ page }) => {
-    // Example test implementation
-    await page.goto('https://example.com');
-    console.log('Login test running...');
-    expect(page).toBeTruthy();
-  });
-}); 
+test('login flow', async ({ page }) => {
+  // Navigate to a test page
+  await page.goto('https://example.com');
+  
+  // Basic assertion to ensure the page loaded
+  const title = await page.title();
+  expect(title).toBeTruthy();
+});
