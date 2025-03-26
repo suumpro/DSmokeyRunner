@@ -1,0 +1,191 @@
+.start-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.start-page-content {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.folder-selection {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.folder-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.folder-input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.browse-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.browse-button:hover {
+  background-color: #5a6268;
+}
+
+.continue-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 2rem;
+}
+
+.continue-button:hover:not(:disabled) {
+  background-color: #357abd;
+}
+
+.continue-button:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #dc3545;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}
+
+.recent-folders {
+  margin-bottom: 2rem;
+}
+
+.recent-folders h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.recent-folder-item {
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recent-folder-item:hover {
+  background-color: #f8f9fa;
+}
+
+.folder-path {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.folder-info {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.getting-started {
+  border-top: 1px solid #e9ecef;
+  padding-top: 2rem;
+}
+
+.getting-started h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.getting-started ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.getting-started li {
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.getting-started li::before {
+  content: "•";
+  color: #4a90e2;
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .start-page {
+    padding: 1rem;
+  }
+
+  .start-page-content {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .folder-selection {
+    flex-direction: column;
+  }
+
+  .browse-button {
+    width: 100%;
+  }
+
+  .recent-folder-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .folder-info {
+    margin-top: 0.5rem;
+  }
+} 

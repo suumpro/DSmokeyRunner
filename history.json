@@ -1,0 +1,81 @@
+{
+  "history": [
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration": 2169
+      },
+      "output": "\nRunning 1 test using 1 worker\n\n  ✓  1 [chromium] › tests/integration/login.spec.js:3:1 › login flow (915ms)\n\n  1 passed (1.5s)\n\nTest Summary:\nTotal: 1\nPassed: 1\nFailed: 0\nDuration: 2169ms\n",
+      "runId": "6d050a01-a45b-462a-b031-2caee4202244",
+      "timestamp": "2025-03-26T22:51:22.345Z"
+    },
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js",
+        "tests/unit/example.spec.ts"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "duration": 2214
+      },
+      "output": "\nRunning 2 tests using 2 workers\n\n  ✓  1 [chromium] › tests/unit/example.spec.ts:4:7 › Example Test Suite › should pass (3ms)\n  ✓  2 [chromium] › tests/integration/login.spec.js:3:1 › login flow (935ms)\n\n  2 passed (1.5s)\n\nTest Summary:\nTotal: 2\nPassed: 2\nFailed: 0\nDuration: 2214ms\n",
+      "runId": "950e7a5d-b46a-4c0e-a14b-4076eef747d3",
+      "timestamp": "2025-03-26T22:47:03.647Z"
+    },
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js",
+        "tests/unit/example.spec.ts"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "duration": 2417
+      },
+      "output": "\nRunning 2 tests using 2 workers\n\n  ✓  1 [chromium] › tests/unit/example.spec.ts:4:7 › Example Test Suite › should pass (3ms)\n  ✓  2 [chromium] › tests/integration/login.spec.js:3:1 › login flow (1.1s)\n\n  2 passed (1.7s)\n\nTest Summary:\nTotal: 2\nPassed: 2\nFailed: 0\nDuration: 2417ms\n",
+      "runId": "466cea45-192b-49b7-812b-4b72b5c755cc",
+      "timestamp": "2025-03-26T22:40:48.925Z"
+    },
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration": 1544
+      },
+      "output": "\nRunning 1 test using 1 worker\n\nLogin test running...\n  ✓  1 [chromium] › tests/integration/login.spec.js:4:3 › Login Flow › should login successfully with valid credentials (579ms)\n\n  1 passed (1.0s)\n\nTest Summary:\nTotal: 1\nPassed: 1\nFailed: 0\nDuration: 1544ms\n",
+      "runId": "4be6b04b-b6f8-4fec-a8d3-e3507b4f24bb",
+      "timestamp": "2025-03-26T22:30:28.559Z"
+    },
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration": 2252
+      },
+      "output": "\nRunning 1 test using 1 worker\n\nLogin test running...\n  ✓  1 [chromium] › tests/integration/login.spec.js:4:3 › Login Flow › should login successfully with valid credentials (948ms)\n\n  1 passed (1.5s)\n\nTest Summary:\nTotal: 1\nPassed: 1\nFailed: 0\nDuration: 2252ms\n",
+      "runId": "35401544-0be8-4caf-be9d-87fb8c6577ed",
+      "timestamp": "2025-03-26T22:30:21.372Z"
+    }
+  ]
+}
