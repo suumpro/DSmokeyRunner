@@ -8,9 +8,10 @@ import {
   deleteProject,
   updateProjectStatus,
   addTestFiles,
-  removeTestFiles
+  removeTestFiles,
+  saveProjects
 } from '../projects';
-import { ProjectStatus } from '../types/Project';
+import { ProjectStatus, validateStatusTransition, getAvailableStatusTransitions, StatusTransition } from '../types/Project';
 
 const router = express.Router();
 
@@ -89,19 +90,85 @@ router.delete('/:id', async (req, res) => {
 // Update project status
 router.patch('/:id/status', async (req, res) => {
   try {
-    const { status } = req.body;
-    if (!status || !Object.values(ProjectStatus).includes(status)) {
-      return res.status(400).json({ error: 'Invalid status provided' });
-    }
+    const { id } = req.params;
+    const { status: newStatus, reason } = req.body;
     
-    const project = await updateProjectStatus(req.params.id, status);
+    // Validate new status using Zod enum
+    const statusResult = ProjectStatus.safeParse(newStatus);
+    if (!statusResult.success) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    const projects = await getProjects();
+    const project = projects.find(p => p.id === id);
+    
     if (!project) {
       return res.status(404).json({ error: 'Project not found' });
     }
+
+    // Validate status transition
+    if (!validateStatusTransition(project.status, newStatus)) {
+      return res.status(400).json({ 
+        error: 'Invalid status transition',
+        allowedTransitions: getAvailableStatusTransitions(project.status)
+      });
+    }
+
+    // Create status transition record
+    const transition: StatusTransition = {
+      from: project.status,
+      to: newStatus,
+      timestamp: new Date(),
+      reason: reason || undefined
+    };
+
+    // Update project
+    project.status = newStatus;
+    project.statusHistory = [...(project.statusHistory || []), transition];
+    project.updatedAt = new Date();
+
+    await saveProjects(projects);
     res.json(project);
   } catch (error) {
-    console.error('Failed to update project status:', error);
-    res.status(500).json({ error: 'Failed to update project status' });
+    console.error('Error updating project status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get project status history
+router.get('/:id/status-history', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const projects = await getProjects();
+    const project = projects.find(p => p.id === id);
+    
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    res.json(project.statusHistory || []);
+  } catch (error) {
+    console.error('Error fetching status history:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get available status transitions
+router.get('/:id/available-status-transitions', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const projects = await getProjects();
+    const project = projects.find(p => p.id === id);
+    
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    const availableTransitions = getAvailableStatusTransitions(project.status);
+    res.json(availableTransitions);
+  } catch (error) {
+    console.error('Error fetching available transitions:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

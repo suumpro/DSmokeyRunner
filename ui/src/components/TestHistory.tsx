@@ -9,29 +9,26 @@ interface TestSummary {
   duration: number;
 }
 
-interface HistoryEntry {
+interface TestHistoryEntry {
   runId: string;
   timestamp: string;
-  testFiles: string[];
   status: 'passed' | 'failed' | 'error';
-  summary: TestSummary;
+  testFiles: string[];
   output: string;
+  summary: TestSummary;
 }
 
 interface TestHistoryProps {
   onSelectRun?: (runId: string) => void;
 }
 
-type SortField = 'date' | 'status' | 'files' | 'passed' | 'duration';
-type SortOrder = 'asc' | 'desc';
-
 export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [history, setHistory] = useState<TestHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedRunId, setExpandedRunId] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<SortField>('date');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [sortField, setSortField] = useState<'date' | 'status' | 'files' | 'passed' | 'duration'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [statusFilter, setStatusFilter] = useState<'all' | 'passed' | 'failed' | 'error'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -78,7 +75,7 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
     }
   };
 
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: typeof sortField) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -107,7 +104,6 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
     // Apply sorting
     result.sort((a, b) => {
       const multiplier = sortOrder === 'asc' ? 1 : -1;
-      
       switch (sortField) {
         case 'date':
           return multiplier * (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -155,7 +151,7 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
             className="status-filter"
           >
             <option value="all">All Status</option>
@@ -163,7 +159,7 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
             <option value="failed">Failed</option>
             <option value="error">Error</option>
           </select>
-          <button 
+          <button
             onClick={handleClearHistory}
             className="clear-history-button"
             disabled={history.length === 0}
@@ -178,44 +174,42 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
       ) : (
         <div className="history-table">
           <div className="history-table-header">
-            <div 
+            <div
               className={`header-cell date ${sortField === 'date' ? sortOrder : ''}`}
               onClick={() => handleSort('date')}
             >
               Date/Time
             </div>
-            <div 
+            <div
               className={`header-cell status ${sortField === 'status' ? sortOrder : ''}`}
               onClick={() => handleSort('status')}
             >
               Status
             </div>
-            <div 
+            <div
               className={`header-cell files ${sortField === 'files' ? sortOrder : ''}`}
               onClick={() => handleSort('files')}
             >
               Files
             </div>
-            <div 
+            <div
               className={`header-cell passed ${sortField === 'passed' ? sortOrder : ''}`}
               onClick={() => handleSort('passed')}
             >
               Pass Rate
             </div>
-            <div 
+            <div
               className={`header-cell duration ${sortField === 'duration' ? sortOrder : ''}`}
               onClick={() => handleSort('duration')}
             >
               Duration
             </div>
-            <div className="header-cell actions">
-              Actions
-            </div>
+            <div className="header-cell actions">Actions</div>
           </div>
 
           <div className="history-table-body">
             {filteredAndSortedHistory.map((entry) => (
-              <div 
+              <div
                 key={entry.runId}
                 className={`history-row ${entry.status}`}
                 onClick={() => onSelectRun?.(entry.runId)}
@@ -230,48 +224,22 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
                   {entry.testFiles.length} file{entry.testFiles.length !== 1 ? 's' : ''}
                 </div>
                 <div className="cell passed">
-                  {Math.round((entry.summary.passed / entry.summary.total) * 100)}%
+                  {((entry.summary.passed / entry.summary.total) * 100).toFixed(1)}%
                 </div>
                 <div className="cell duration">
-                  {(entry.summary.duration / 1000).toFixed(1)}s
+                  {entry.summary.duration}ms
                 </div>
                 <div className="cell actions">
                   <button
-                    className="action-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setExpandedRunId(expandedRunId === entry.runId ? null : entry.runId);
-                    }}
-                  >
-                    {expandedRunId === entry.runId ? 'Hide' : 'Details'}
-                  </button>
-                  <button
-                    className="action-button delete"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteEntry(entry.runId);
                     }}
+                    className="delete-button"
                   >
                     Delete
                   </button>
                 </div>
-
-                {expandedRunId === entry.runId && (
-                  <div className="expanded-details">
-                    <div className="test-files">
-                      <h4>Test Files:</h4>
-                      <ul>
-                        {entry.testFiles.map((file, index) => (
-                          <li key={index}>{file}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="test-output">
-                      <h4>Output:</h4>
-                      <pre>{entry.output}</pre>
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -279,4 +247,4 @@ export const TestHistory: React.FC<TestHistoryProps> = ({ onSelectRun }) => {
       )}
     </div>
   );
-}; 
+};

@@ -1,0 +1,145 @@
+.status-manager {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.current-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.status-label {
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  text-transform: capitalize;
+}
+
+.status-badge.gray { background-color: #6c757d; }
+.status-badge.green { background-color: #28a745; }
+.status-badge.orange { background-color: #fd7e14; }
+.status-badge.blue { background-color: #007bff; }
+.status-badge.purple { background-color: #6f42c1; }
+
+.available-transitions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.status-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-transform: capitalize;
+}
+
+.status-button:hover {
+  opacity: 0.9;
+}
+
+.status-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-button.gray { background-color: #6c757d; }
+.status-button.green { background-color: #28a745; }
+.status-button.orange { background-color: #fd7e14; }
+.status-button.blue { background-color: #007bff; }
+.status-button.purple { background-color: #6f42c1; }
+
+.error-message {
+  color: #dc3545;
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.reason-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.reason-modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reason-modal-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+}
+
+.reason-modal-content textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.cancel-button,
+.confirm-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cancel-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.confirm-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.cancel-button:hover,
+.confirm-button:hover {
+  opacity: 0.9;
+}
+
+.confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+} 

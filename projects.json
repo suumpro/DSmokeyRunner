@@ -324,6 +324,26 @@
       "status": "draft",
       "createdAt": "2025-03-27T07:41:22.275Z",
       "updatedAt": "2025-03-27T07:41:22.275Z"
+    },
+    {
+      "name": "UI Test Project",
+      "description": "A project for testing UI integration",
+      "testSite": "Example Test Site",
+      "siteAddress": "https://example.com",
+      "version": "1.0.0",
+      "testFiles": [],
+      "id": "76a52710-830f-4c38-b39c-05b20991fe34",
+      "status": "active",
+      "statusHistory": [
+        {
+          "from": "draft",
+          "to": "active",
+          "timestamp": "2025-03-27T08:01:25.702Z",
+          "reason": "Project setup complete"
+        }
+      ],
+      "createdAt": "2025-03-27T08:01:21.490Z",
+      "updatedAt": "2025-03-27T08:01:25.702Z"
     }
   ]
 }

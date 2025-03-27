@@ -1,3 +1,4 @@
+"use strict";
 import React from 'react';
 import { TestHistory } from '../components/TestHistory';
 import './HistoryPage.css';
@@ -25,4 +26,4 @@ export const HistoryPage: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};
