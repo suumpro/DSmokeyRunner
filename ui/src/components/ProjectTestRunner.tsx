@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import './ProjectTestRunner.css';
 
+interface TestSummary {
+  total: number;
+  passed: number;
+  failed: number;
+  duration: number;
+}
+
 interface TestResult {
   output: string;
-  summary: {
-    total: number;
-    passed: number;
-    failed: number;
-    duration: number;
-  };
+  summary: TestSummary;
 }
 
 interface ProjectTestRunnerProps {
@@ -25,7 +27,7 @@ export const ProjectTestRunner: React.FC<ProjectTestRunnerProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [isRunning, setIsRunning] = useState(false);
   const [currentResult, setCurrentResult] = useState<TestResult | null>(null);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
 
   const handleFileToggle = (filePath: string) => {
     const newSelected = new Set(selectedFiles);
@@ -95,10 +97,7 @@ export const ProjectTestRunner: React.FC<ProjectTestRunnerProps> = ({
       <div className="test-files-section">
         <div className="section-header">
           <h3>Select Test Files to Run</h3>
-          <button
-            className="select-all-button"
-            onClick={handleSelectAll}
-          >
+          <button className="select-all-button" onClick={handleSelectAll}>
             {selectedFiles.size === testFiles.length ? 'Deselect All' : 'Select All'}
           </button>
         </div>
@@ -171,4 +170,4 @@ export const ProjectTestRunner: React.FC<ProjectTestRunnerProps> = ({
       </div>
     </div>
   );
-}; 
+};

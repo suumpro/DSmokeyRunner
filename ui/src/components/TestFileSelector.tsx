@@ -7,10 +7,12 @@ interface TestFile {
 }
 
 interface TestFileSelectorProps {
-  onSelectionChange: (selectedFiles: string[]) => void;
+  onSelectionChange: (selectedPaths: string[]) => void;
 }
 
-export const TestFileSelector: React.FC<TestFileSelectorProps> = ({ onSelectionChange }) => {
+export const TestFileSelector: React.FC<TestFileSelectorProps> = ({
+  onSelectionChange,
+}) => {
   const [testFiles, setTestFiles] = useState<TestFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +27,12 @@ export const TestFileSelector: React.FC<TestFileSelectorProps> = ({ onSelectionC
       const response = await fetch('http://localhost:3001/api/test-files');
       const data = await response.json();
       
-      setTestFiles(data.testFiles.map((path: string) => ({
-        path,
-        selected: false
-      })));
+      setTestFiles(
+        data.testFiles.map((path: string) => ({
+          path,
+          selected: false,
+        }))
+      );
       setError(null);
     } catch (err) {
       setError('Failed to fetch test files. Please try again.');
@@ -38,14 +42,14 @@ export const TestFileSelector: React.FC<TestFileSelectorProps> = ({ onSelectionC
   };
 
   const handleTestFileToggle = (index: number) => {
-    const updatedFiles = testFiles.map((file, i) => 
+    const updatedFiles = testFiles.map((file, i) =>
       i === index ? { ...file, selected: !file.selected } : file
     );
     setTestFiles(updatedFiles);
-    
+
     const selectedPaths = updatedFiles
-      .filter(file => file.selected)
-      .map(file => file.path);
+      .filter((file) => file.selected)
+      .map((file) => file.path);
     onSelectionChange(selectedPaths);
   };
 

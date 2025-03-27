@@ -2,31 +2,25 @@ import React, { useState, useEffect } from 'react';
 import './EditProjectModal.css';
 
 interface Project {
-  id: string;
   name: string;
-  description: string;
+  description?: string;
   testSite: string;
   siteAddress: string;
   version: string;
-  status: 'draft' | 'active' | 'completed' | 'archived';
-  testFiles: string[];
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface EditProjectModalProps {
   project: Project;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (projectData: ProjectFormData) => void;
+  onSave: (data: Project) => void;
 }
 
-interface ProjectFormData {
-  name: string;
-  description: string;
-  testSite: string;
-  siteAddress: string;
-  version: string;
+interface FormErrors {
+  name?: string;
+  siteAddress?: string;
+  version?: string;
+  [key: string]: string | undefined;
 }
 
 export const EditProjectModal: React.FC<EditProjectModalProps> = ({
@@ -35,7 +29,7 @@ export const EditProjectModal: React.FC<EditProjectModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] = useState<ProjectFormData>({
+  const [formData, setFormData] = useState<Project>({
     name: '',
     description: '',
     testSite: '',
@@ -43,13 +37,13 @@ export const EditProjectModal: React.FC<EditProjectModalProps> = ({
     version: '',
   });
 
-  const [errors, setErrors] = useState<Partial<ProjectFormData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     if (project) {
       setFormData({
         name: project.name,
-        description: project.description,
+        description: project.description || '',
         testSite: project.testSite,
         siteAddress: project.siteAddress,
         version: project.version,
@@ -58,29 +52,24 @@ export const EditProjectModal: React.FC<EditProjectModalProps> = ({
   }, [project]);
 
   const validateForm = () => {
-    const newErrors: Partial<ProjectFormData> = {};
-
+    const newErrors: FormErrors = {};
     if (!formData.name.trim()) {
       newErrors.name = 'Project name is required';
     }
-
     if (!formData.siteAddress.trim()) {
       newErrors.siteAddress = 'Site address is required';
     } else if (!/^https?:\/\/.+/.test(formData.siteAddress)) {
       newErrors.siteAddress = 'Please enter a valid URL starting with http:// or https://';
     }
-
     if (!formData.version.trim()) {
       newErrors.version = 'Version is required';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (validateForm()) {
       onSave(formData);
     }
@@ -89,7 +78,7 @@ export const EditProjectModal: React.FC<EditProjectModalProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof ProjectFormData]) {
+    if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
@@ -183,4 +172,4 @@ export const EditProjectModal: React.FC<EditProjectModalProps> = ({
       </div>
     </div>
   );
-}; 
+};

@@ -8,15 +8,12 @@ interface Project {
   name: string;
   description: string;
   testSite: string;
-  siteAddress: string;
   version: string;
-  status: 'draft' | 'active' | 'completed' | 'archived';
+  status: string;
   testFiles: string[];
-  createdAt: string;
-  updatedAt: string;
 }
 
-interface ProjectFormData {
+interface ProjectData {
   name: string;
   description: string;
   testSite: string;
@@ -28,7 +25,7 @@ export const ProjectsPage: React.FC = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
@@ -54,7 +51,7 @@ export const ProjectsPage: React.FC = () => {
     }
   };
 
-  const handleCreateProject = async (projectData: ProjectFormData) => {
+  const handleCreateProject = async (projectData: ProjectData) => {
     try {
       const response = await fetch('http://localhost:3001/api/projects', {
         method: 'POST',
@@ -79,13 +76,18 @@ export const ProjectsPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: Project['status']) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'draft': return 'gray';
-      case 'active': return 'green';
-      case 'completed': return 'blue';
-      case 'archived': return 'purple';
-      default: return 'gray';
+      case 'draft':
+        return 'gray';
+      case 'active':
+        return 'green';
+      case 'completed':
+        return 'blue';
+      case 'archived':
+        return 'purple';
+      default:
+        return 'gray';
     }
   };
 
@@ -108,7 +110,7 @@ export const ProjectsPage: React.FC = () => {
         <div className="projects-page-header">
           <h1>Test Projects</h1>
           <p className="subtitle">Manage your test automation projects</p>
-          <button 
+          <button
             className="create-project-button"
             onClick={() => setShowCreateModal(true)}
           >
@@ -133,13 +135,13 @@ export const ProjectsPage: React.FC = () => {
               <div className="stat-item">
                 <span className="stat-label">Active Projects</span>
                 <span className="stat-value">
-                  {projects.filter(p => p.status === 'active').length}
+                  {projects.filter((p) => p.status === 'active').length}
                 </span>
               </div>
               <div className="stat-item">
                 <span className="stat-label">Completed</span>
                 <span className="stat-value">
-                  {projects.filter(p => p.status === 'completed').length}
+                  {projects.filter((p) => p.status === 'completed').length}
                 </span>
               </div>
             </div>
@@ -169,7 +171,7 @@ export const ProjectsPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="project-actions">
-                    <button 
+                    <button
                       className="view-project-button"
                       onClick={() => navigate(`/projects/${project.id}`)}
                     >
@@ -190,4 +192,4 @@ export const ProjectsPage: React.FC = () => {
       />
     </div>
   );
-}; 
+};
