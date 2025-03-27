@@ -1,68 +1,294 @@
 :root {
+  /* Typography */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Colors - Base */
+  --primary: #4299e1;
+  --primary-dark: #3182ce;
+  --secondary: #6c757d;
+  --secondary-dark: #5a6268;
+  
+  /* Colors - Status */
+  --success: #2e7d32;
+  --success-light: #4caf50;
+  --error: #dc3545;
+  --error-light: #f8d7da;
+  --warning: #ff9800;
+  --warning-dark: #f57c00;
+
+  /* Colors - Grayscale */
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* Layout System */
+  --container-width: 1280px;
+  --container-padding: var(--space-xl);
+  --section-spacing: var(--space-2xl);
+  --content-spacing: var(--space-xl);
+  
+  /* Grid System */
+  --grid-columns: 12;
+  --grid-gap: var(--space-lg);
+  --grid-container-gap: var(--space-xl);
+  
+  /* Component Sizing */
+  --header-height: 80px;
+  --sidebar-width: 280px;
+  --card-padding: var(--space-lg);
+  --button-height: 36px;
+  --input-height: 40px;
+  
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  /* Z-index Scale */
+  --z-header: 100;
+  --z-modal: 200;
+  --z-tooltip: 300;
+  
+  /* Transitions */
+  --transition-base: 0.2s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography Sizes */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 24px;
+  --text-xl: 32px;
+  --text-2xl: 48px;
+
+  /* Base Colors */
+  color: var(--gray-900);
+  background-color: var(--gray-50);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* Base Styles */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  width: var(--container-width);
+  min-height: 800px;
+  margin: 0 auto;
+  background-color: var(--gray-50);
 }
 
+/* Typography Base Styles */
 h1 {
-  font-size: 3.2em;
+  font-size: var(--text-2xl);
   line-height: 1.1;
+  margin: 0 0 var(--space-xl);
+  color: var(--gray-900);
 }
 
+h2 {
+  font-size: var(--text-xl);
+  line-height: 1.2;
+  margin: 0 0 var(--space-lg);
+  color: var(--gray-800);
+}
+
+h3 {
+  font-size: var(--text-lg);
+  line-height: 1.3;
+  margin: 0 0 var(--space-md);
+  color: var(--gray-800);
+}
+
+p {
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--gray-700);
+  margin: 0 0 var(--space-md);
+}
+
+/* Link Styles */
+a {
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: var(--text-base);
+  transition: color var(--transition-base);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Button Base Styles */
 button {
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-base);
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--gray-50);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all var(--transition-base);
+  min-width: 120px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:hover {
+  border-color: var(--primary);
+  background-color: var(--gray-100);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Input Base Styles */
+input {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-300);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-base);
+  transition: all var(--transition-base);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.1);
+}
+
+/* Table Base Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-base);
+}
+
+th, td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+th {
+  font-weight: 600;
+  color: var(--gray-800);
+  background-color: var(--gray-50);
+}
+
+/* Card Base Styles */
+.card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-lg);
+}
+
+/* Layout Classes */
+.container {
+  width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gap);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section Classes */
+.section {
+  margin-bottom: var(--section-spacing);
+}
+
+.section-header {
+  margin-bottom: var(--content-spacing);
+}
+
+/* Component Base Classes */
+.card {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  padding: var(--card-padding);
+}
+
+.button {
+  height: var(--button-height);
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.input {
+  height: var(--input-height);
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  font-size: var(--text-sm);
 }
