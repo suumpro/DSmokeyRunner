@@ -12,6 +12,7 @@ import {
   deleteHistoryEntry
 } from './history';
 import fs from 'fs';
+import projectsRouter from './routes/projects';
 
 // Define interfaces for better type safety
 interface TestResult {
@@ -53,10 +54,21 @@ app.get('/', (req, res) => {
       'GET /api/history': 'Get test run history',
       'GET /api/history/:runId': 'Get specific test run details',
       'DELETE /api/history/:runId': 'Delete specific history entry',
-      'POST /api/history/clear': 'Clear all history'
+      'POST /api/history/clear': 'Clear all history',
+      'GET /api/projects': 'Get all projects',
+      'GET /api/projects/:id': 'Get a specific project',
+      'POST /api/projects': 'Create a new project',
+      'PUT /api/projects/:id': 'Update a project',
+      'DELETE /api/projects/:id': 'Delete a project',
+      'PATCH /api/projects/:id/status': 'Update project status',
+      'POST /api/projects/:id/test-files': 'Add test files to a project',
+      'DELETE /api/projects/:id/test-files': 'Remove test files from a project'
     }
   });
 });
+
+// Mount the projects router
+app.use('/api/projects', projectsRouter);
 
 app.get('/api/test-files', async (req, res) => {
   try {

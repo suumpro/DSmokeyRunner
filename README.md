@@ -2,15 +2,42 @@
 
 A modern, feature-rich Playwright-based automation runner for web automation tasks. DSmokey Runner provides a sleek UI interface to manage, run, and monitor your automation tests with ease.
 
+## Tech Stack
+
+### Backend
+- Node.js & Express.js - Server framework
+- TypeScript - Type-safe development
+- Zod - Runtime type validation and schema definition
+- Playwright - Web automation and testing
+- Jest - Unit testing
+- fs-extra - Enhanced file system operations
+
+### Frontend
+- React 18 - UI library
+- TypeScript - Type-safe development
+- Vite - Build tool and development server
+- React Router - Client-side routing
+- CSS Modules - Scoped styling
+- Axios - HTTP client
+
+### Development Tools
+- ESLint - Code linting
+- Prettier - Code formatting
+- Nodemon - Development auto-reload
+- Concurrently - Running multiple scripts
+
 ## Features
 
 - 🎭 Built on top of Playwright for reliable web automation
-- 🖥️ Modern UI interface for test management
+- 🖥️ Modern React-based UI interface for test management
+- 📋 Project-based test organization
 - 🚀 Fast and concurrent test execution
 - 📊 Real-time test execution monitoring
 - 📝 Detailed test reports and history
 - 🔄 Auto-scanning of test files
 - 🛠️ Easy configuration and setup
+- 🔒 Type-safe development with TypeScript
+- 📱 Responsive design for various screen sizes
 
 ## Prerequisites
 
@@ -61,11 +88,23 @@ npm run ui      # Start UI in another terminal
 
 ```
 DSmokeyRunner/
-├── src/           # Backend source code
-├── ui/            # Frontend UI code
-├── tests/         # Test files
-├── dist/          # Compiled output
-└── test-results/  # Test execution results
+├── src/                # Backend source code
+│   ├── cli.ts         # Command-line interface
+│   ├── routes/        # API routes
+│   ├── types/         # TypeScript types and schemas
+│   └── utils/         # Utility functions
+├── ui/                # Frontend UI code
+│   ├── src/
+│   │   ├── components/# React components
+│   │   ├── pages/     # Page components
+│   │   ├── styles/    # Global styles
+│   │   └── utils/     # Frontend utilities
+│   └── public/        # Static assets
+├── tests/             # Test files
+│   ├── unit/         # Unit tests
+│   └── integration/  # Integration tests
+├── dist/             # Compiled output
+└── test-results/     # Test execution results
 ```
 
 ## Configuration
