@@ -2,6 +2,36 @@
   "history": [
     {
       "testFiles": [
+        "tests/integration/login.spec.js"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration": 2318
+      },
+      "output": "\nRunning 1 test using 1 worker\n\n  ✓  1 [chromium] › tests/integration/login.spec.js:3:1 › login flow (983ms)\n\n  1 passed (1.6s)\n\nTest Summary:\nTotal: 1\nPassed: 1\nFailed: 0\nDuration: 2318ms\n",
+      "runId": "c9a806ba-2ac9-45a6-a156-037a47aafae6",
+      "timestamp": "2025-03-27T07:41:39.553Z"
+    },
+    {
+      "testFiles": [
+        "tests/integration/login.spec.js"
+      ],
+      "status": "passed",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration": 2177
+      },
+      "output": "\nRunning 1 test using 1 worker\n\n  ✓  1 [chromium] › tests/integration/login.spec.js:3:1 › login flow (836ms)\n\n  1 passed (1.4s)\n\nTest Summary:\nTotal: 1\nPassed: 1\nFailed: 0\nDuration: 2177ms\n",
+      "runId": "af71ba5e-d685-44f2-954b-3e49a508d6cd",
+      "timestamp": "2025-03-27T01:23:28.679Z"
+    },
+    {
+      "testFiles": [
         "tests/unit/example.spec.ts"
       ],
       "status": "passed",

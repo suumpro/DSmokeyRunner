@@ -30,6 +30,14 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </li>
           <li>
             <Link 
+              to="/projects" 
+              className={isActive('/projects') ? 'active' : ''}
+            >
+              Projects
+            </Link>
+          </li>
+          <li>
+            <Link 
               to="/run" 
               className={isActive('/run') ? 'active' : ''}
             >
