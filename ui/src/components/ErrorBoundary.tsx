@@ -2,7 +2,6 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
-  fallback?: ReactNode;
 }
 
 interface State {
@@ -26,20 +25,18 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
+      return (
         <div className="error-boundary">
           <h2>Something went wrong</h2>
-          <details style={{ whiteSpace: 'pre-wrap' }}>
-            {this.state.error && this.state.error.toString()}
-          </details>
-          <button
-            onClick={() => {
-              this.setState({ hasError: false, error: null });
-              window.location.href = '/';
-            }}
-          >
-            Try again
+          <p>The page encountered an error. Please try refreshing.</p>
+          <button onClick={() => window.location.reload()}>
+            Refresh Page
           </button>
+          {process.env.NODE_ENV === 'development' && (
+            <pre className="error-details">
+              {this.state.error?.toString()}
+            </pre>
+          )}
         </div>
       );
     }

@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { StatusManager } from '../components/StatusManager';
-import { StatusHistory } from '../components/StatusHistory';
+import { Project } from '../types/Project';
 import { EditProjectModal } from '../components/EditProjectModal';
 import { DeleteProjectModal } from '../components/DeleteProjectModal';
+import { StatusManager } from '../components/StatusManager';
+import { StatusHistory } from '../components/StatusHistory';
+import { ProjectTestRunner } from '../components/ProjectTestRunner';
 import './ProjectDetailsPage.css';
-
-interface Project {
-  id: string;
-  name: string;
-  description?: string;
-  testSite: string;
-  version: string;
-  status: 'draft' | 'active' | 'completed' | 'archived';
-  testFiles: string[];
-  siteAddress: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export const ProjectDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,12 +24,19 @@ export const ProjectDetailsPage: React.FC = () => {
 
   const fetchProjectDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/projects/${id}`);
-      setProject(response.data);
+      setIsLoading(true);
       setError(null);
+      const response = await axios.get(`http://localhost:3001/api/projects/${id}`);
+      
+      if (!response.data) {
+        throw new Error('Project not found');
+      }
+      
+      setProject(response.data);
     } catch (err) {
       console.error('Error fetching project details:', err);
-      setError('Failed to load project details');
+      setError(err instanceof Error ? err.message : 'Failed to load project details');
+      setProject(null);
     } finally {
       setIsLoading(false);
     }
@@ -83,12 +79,16 @@ export const ProjectDetailsPage: React.FC = () => {
     return <div className="project-details-loading">Loading project details...</div>;
   }
 
-  if (error) {
-    return <div className="project-details-error">{error}</div>;
-  }
-
-  if (!project) {
-    return <div className="project-details-error">Project not found</div>;
+  if (error || !project) {
+    return (
+      <div className="error-message">
+        <h2>Error Loading Project</h2>
+        <p>{error || 'Project not found'}</p>
+        <button onClick={() => navigate('/projects')} className="back-button">
+          Back to Projects
+        </button>
+      </div>
+    );
   }
 
   return (
