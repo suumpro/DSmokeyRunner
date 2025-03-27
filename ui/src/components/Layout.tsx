@@ -1,3 +1,4 @@
+"use strict";
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Layout.css';
@@ -8,8 +9,8 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
-
-  const isActive = (path: string) => {
+  
+  const isActive = (path: string): boolean => {
     return location.pathname === path;
   };
 
@@ -21,34 +22,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <ul className="nav-links">
           <li>
-            <Link 
-              to="/" 
-              className={isActive('/') ? 'active' : ''}
-            >
+            <Link to="/" className={isActive('/') ? 'active' : ''}>
               Test Files
             </Link>
           </li>
           <li>
-            <Link 
-              to="/projects" 
-              className={isActive('/projects') ? 'active' : ''}
-            >
+            <Link to="/projects" className={isActive('/projects') ? 'active' : ''}>
               Projects
             </Link>
           </li>
           <li>
-            <Link 
-              to="/run" 
-              className={isActive('/run') ? 'active' : ''}
-            >
+            <Link to="/run" className={isActive('/run') ? 'active' : ''}>
               Run Tests
             </Link>
           </li>
           <li>
-            <Link 
-              to="/history" 
-              className={isActive('/history') ? 'active' : ''}
-            >
+            <Link to="/history" className={isActive('/history') ? 'active' : ''}>
               History
             </Link>
           </li>
@@ -62,4 +51,4 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       </footer>
     </div>
   );
-}; 
+};

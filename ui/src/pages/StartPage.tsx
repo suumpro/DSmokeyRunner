@@ -1,13 +1,12 @@
+"use strict";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './StartPage.css';
 
 interface TestFile {
   path: string;
-  type: string;  // 'unit' | 'integration'
+  type: 'unit' | 'integration';
 }
-
-const RECENT_FOLDERS_KEY = 'dsmokey_recent_folders';
 
 export const StartPage: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ export const StartPage: React.FC = () => {
     try {
       const response = await fetch('http://localhost:3001/api/test-files');
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.message || 'Failed to fetch test files');
       }
@@ -113,12 +112,14 @@ export const StartPage: React.FC = () => {
                         {file.type}
                       </td>
                       <td>
-                        <button 
+                        <button
                           className="view-file-button"
-                          onClick={() => navigate('/run', { 
-                            state: { selectedFile: file.path },
-                            replace: false 
-                          })}
+                          onClick={() =>
+                            navigate('/run', {
+                              state: { selectedFile: file.path },
+                              replace: false
+                            })
+                          }
                         >
                           View Details
                         </button>
@@ -143,4 +144,4 @@ export const StartPage: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

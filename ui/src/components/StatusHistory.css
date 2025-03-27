@@ -1,0 +1,102 @@
+.status-history {
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-history h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #343a40;
+}
+
+.status-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+  display: flex;
+}
+
+.timeline-connector {
+  position: absolute;
+  left: -2rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #007bff;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.timeline-line {
+  flex-grow: 1;
+  width: 2px;
+  background-color: #dee2e6;
+  margin: 4px 0;
+}
+
+.timeline-content {
+  flex-grow: 1;
+  padding-left: 1rem;
+}
+
+.transition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.transition-status {
+  font-weight: 500;
+  color: #495057;
+}
+
+.transition-date {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.transition-reason {
+  font-size: 0.875rem;
+  color: #6c757d;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.status-history-loading {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.status-history-error {
+  padding: 1rem;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.status-history-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+} 

@@ -5,41 +5,18 @@
 }
 
 .project-details-header {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.header-content h1 {
+.project-details-header h1 {
   margin: 0;
-  font-size: 1.8rem;
-  color: #2c3e50;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  color: #6c757d;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s;
-}
-
-.back-button:hover {
   color: #343a40;
 }
 
@@ -50,81 +27,129 @@
 
 .edit-button,
 .delete-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: opacity 0.2s;
 }
 
 .edit-button {
   background-color: #007bff;
   color: white;
-  border: none;
-}
-
-.edit-button:hover {
-  background-color: #0056b3;
 }
 
 .delete-button {
   background-color: #dc3545;
   color: white;
-  border: none;
 }
 
+.edit-button:hover,
 .delete-button:hover {
-  background-color: #c82333;
+  opacity: 0.9;
 }
 
 .project-details-content {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 2rem;
 }
 
-.details-section {
+.project-info-section,
+.project-analytics-section,
+.project-files-section {
   background-color: white;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.details-section h2 {
+.project-info-section h2,
+.project-files-section h2 {
   margin: 0 0 1.5rem 0;
-  color: #2c3e50;
-  font-size: 1.4rem;
+  color: #343a40;
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
 }
 
-.info-item .label {
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.label {
   color: #6c757d;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.info-item .value {
-  color: #2c3e50;
-  font-size: 1rem;
-  margin: 0;
+.value {
+  color: #212529;
 }
 
-.info-item .link {
+.value.link {
   color: #007bff;
   text-decoration: none;
 }
 
-.info-item .link:hover {
+.value.link:hover {
   text-decoration: underline;
+}
+
+.test-files-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.test-files-list li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+  color: #495057;
+}
+
+.test-files-list li:last-child {
+  border-bottom: none;
+}
+
+.no-files {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .project-details-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .project-analytics-section {
+    grid-column: 1 / -1;
+  }
 }
 
 .status-controls {
@@ -212,12 +237,6 @@
 .add-files-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.test-files-list {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 
 .test-file-item {

@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import './ProjectTestHistory.css';
 
+interface TestSummary {
+  passed: number;
+  total: number;
+  duration: number;
+}
+
 interface TestRun {
   id: string;
-  projectId: string;
   timestamp: string;
+  status: string;
   testFiles: string[];
   output: string;
-  summary: {
-    total: number;
-    passed: number;
-    failed: number;
-    duration: number;
-  };
-  status: 'passed' | 'failed';
+  summary: TestSummary;
 }
 
 interface ProjectTestHistoryProps {
   projectId: string;
 }
 
+type SortField = 'timestamp' | 'status' | 'duration';
+type SortOrder = 'asc' | 'desc';
+
 export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
   projectId,
 }) => {
   const [testRuns, setTestRuns] = useState<TestRun[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [expandedRunId, setExpandedRunId] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<'timestamp' | 'status' | 'duration'>('timestamp');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortField, setSortField] = useState<SortField>('timestamp');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
   useEffect(() => {
     fetchTestHistory();
@@ -39,7 +42,7 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
       setIsLoading(true);
       const response = await fetch(`http://localhost:3001/api/projects/${projectId}/test-history`);
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.message || 'Failed to fetch test history');
       }
@@ -55,7 +58,7 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
     }
   };
 
-  const handleSort = (field: typeof sortField) => {
+  const handleSort = (field: SortField) => {
     if (field === sortField) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -64,7 +67,7 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
     }
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -76,7 +79,6 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
 
   const sortedTestRuns = [...testRuns].sort((a, b) => {
     const multiplier = sortOrder === 'asc' ? 1 : -1;
-    
     switch (sortField) {
       case 'timestamp':
         return multiplier * (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -141,7 +143,10 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
         <div className="history-list">
           {sortedTestRuns.map((run) => (
             <div key={run.id} className={`history-item ${run.status}`}>
-              <div className="history-item-header" onClick={() => setExpandedRunId(expandedRunId === run.id ? null : run.id)}>
+              <div
+                className="history-item-header"
+                onClick={() => setExpandedRunId(expandedRunId === run.id ? null : run.id)}
+              >
                 <div className="run-info">
                   <span className="timestamp">{formatDate(run.timestamp)}</span>
                   <span className={`status-badge ${run.status}`}>
@@ -186,4 +191,4 @@ export const ProjectTestHistory: React.FC<ProjectTestHistoryProps> = ({
       )}
     </div>
   );
-}; 
+};

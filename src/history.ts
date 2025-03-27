@@ -28,7 +28,7 @@ interface DbSchema {
 // Initialize database
 const dbFile = path.join(process.cwd(), 'history.json')
 const adapter = new JSONFile<DbSchema>(dbFile)
-const db = new Low<DbSchema>(adapter, { history: [] })
+const db = new Low(adapter, { history: [] }) as Low<DbSchema>
 
 // Maximum number of history entries to keep
 const MAX_HISTORY_ENTRIES = 100

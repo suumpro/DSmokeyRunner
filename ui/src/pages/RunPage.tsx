@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './RunPage.css';
 
 interface TestFile {
   path: string;
-  type: string;
+  type: 'unit' | 'integration';
   content?: string;
 }
 
@@ -20,7 +20,6 @@ interface TestResult {
 
 export const RunPage: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<TestFile | null>(null);
   const [testFiles, setTestFiles] = useState<TestFile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -179,7 +178,10 @@ export const RunPage: React.FC = () => {
             {error ? (
               <div className="error-message">
                 {error}
-                <button onClick={() => selectedFile ? fetchFileContent(selectedFile.path) : fetchTestFiles()} className="retry-button">
+                <button
+                  onClick={() => selectedFile ? fetchFileContent(selectedFile.path) : fetchTestFiles()}
+                  className="retry-button"
+                >
                   Retry
                 </button>
               </div>
@@ -217,7 +219,7 @@ export const RunPage: React.FC = () => {
                       </div>
                       <div className="summary-item duration">
                         <span>Duration</span>
-                        <span>{(testResult.summary.duration / 1000).toFixed(2)}s</span>
+                        <span>{testResult.summary.duration}ms</span>
                       </div>
                     </div>
                     <div className="test-output">
@@ -228,8 +230,8 @@ export const RunPage: React.FC = () => {
                 )}
               </>
             ) : (
-              <div className="empty-state">
-                <p>Select a test file to view its contents and run tests</p>
+              <div className="no-file-selected">
+                <p>Select a test file from the list to view and run it</p>
               </div>
             )}
           </div>
@@ -237,4 +239,4 @@ export const RunPage: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import './TestRunner.css';
 
+interface TestResult {
+  success: boolean;
+  error?: string;
+}
+
 interface TestRunnerProps {
   selectedFiles: string[];
   onTestStart: () => void;
-  onTestComplete: (result: any) => void;
+  onTestComplete: (result: TestResult) => void;
 }
 
 export const TestRunner: React.FC<TestRunnerProps> = ({

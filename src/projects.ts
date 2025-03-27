@@ -45,9 +45,10 @@ export async function createProject(input: CreateProjectInput): Promise<Project>
   const newProject: Project = {
     ...input,
     id: uuidv4(),
-    status: ProjectStatus.DRAFT,
-    createdAt: dayjs().toISOString(),
-    updatedAt: dayjs().toISOString()
+    status: 'draft',
+    statusHistory: [],
+    createdAt: new Date(),
+    updatedAt: new Date()
   };
 
   db.data.projects.push(newProject);
@@ -68,7 +69,7 @@ export async function getProject(id: string): Promise<Project | null> {
 }
 
 // Update a project
-export async function updateProject(id: string, input: UpdateProjectInput): Promise<Project | null> {
+export async function updateProject(id: string, input: Partial<Project>): Promise<Project | null> {
   const validation = validateUpdateProject(input);
   if (!validation.success) {
     throw new Error(`Invalid project data: ${validation.error.message}`);
@@ -84,7 +85,7 @@ export async function updateProject(id: string, input: UpdateProjectInput): Prom
   const updatedProject: Project = {
     ...db.data.projects[index],
     ...input,
-    updatedAt: dayjs().toISOString()
+    updatedAt: new Date()
   };
 
   db.data.projects[index] = updatedProject;
@@ -122,6 +123,12 @@ export async function addTestFiles(id: string, testFiles: string[]): Promise<Pro
 
   const updatedFiles = [...new Set([...project.testFiles, ...testFiles])];
   return updateProject(id, { testFiles: updatedFiles });
+}
+
+// Save projects to database
+export async function saveProjects(projects: Project[]): Promise<void> {
+  db.data.projects = projects;
+  await db.write();
 }
 
 // Remove test files from a project

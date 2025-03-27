@@ -1,67 +1,62 @@
 import { z } from 'zod';
 
-// Project status enum
-export enum ProjectStatus {
-  ACTIVE = 'active',
-  ARCHIVED = 'archived',
-  DRAFT = 'draft'
-}
+// Define valid project statuses
+export const ProjectStatus = z.enum(['draft', 'active', 'completed', 'archived']);
+export type ProjectStatus = z.infer<typeof ProjectStatus>;
 
-// Base Project interface
-export interface Project {
-  id: string;
-  name: string;
-  testSite: string;
-  testFiles: string[];
-  version: string;
-  siteAddress: string;
-  status: ProjectStatus;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Define status transition
+export const StatusTransition = z.object({
+  from: ProjectStatus,
+  to: ProjectStatus,
+  timestamp: z.date(),
+  reason: z.string().optional(),
+});
+export type StatusTransition = z.infer<typeof StatusTransition>;
 
-// Zod schema for project validation
-export const ProjectSchema = z.object({
-  id: z.string().uuid(),
+// Define allowed status transitions
+export const ALLOWED_STATUS_TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
+  draft: ['active'],
+  active: ['completed'],
+  completed: ['archived'],
+  archived: [],
+};
+
+// Update Project schema
+export const createProjectSchema = z.object({
   name: z.string().min(1, 'Project name is required'),
-  testSite: z.string().min(1, 'Test site is required'),
+  description: z.string(),
+  testSite: z.string().min(1, 'Test site name is required'),
+  siteAddress: z.string().url('Invalid URL format'),
+  version: z.string(),
   testFiles: z.array(z.string()),
-  version: z.string().min(1, 'Version is required'),
-  siteAddress: z.string().url('Invalid site address URL'),
-  status: z.nativeEnum(ProjectStatus),
-  description: z.string().optional(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
 });
 
-// Type for creating a new project (omits auto-generated fields)
-export type CreateProjectInput = Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'status'>;
-
-// Type for updating an existing project
-export type UpdateProjectInput = Partial<Omit<Project, 'id' | 'createdAt' | 'updatedAt'>>;
-
-// Schema for creating a new project
-const createProjectSchema = ProjectSchema.omit({ 
-  id: true, 
-  createdAt: true, 
-  updatedAt: true, 
-  status: true 
+export const Project = createProjectSchema.extend({
+  id: z.string().uuid(),
+  status: ProjectStatus,
+  statusHistory: z.array(StatusTransition),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
-// Schema for updating a project
-const updateProjectSchema = ProjectSchema.partial().omit({ 
-  id: true, 
-  createdAt: true, 
-  updatedAt: true 
-});
+export type Project = z.infer<typeof Project>;
+export type CreateProjectInput = z.infer<typeof createProjectSchema>;
+export type UpdateProjectInput = Partial<CreateProjectInput>;
 
-// Validation function for project creation
-export function validateCreateProject(input: CreateProjectInput): z.SafeParseReturnType<typeof createProjectSchema, typeof createProjectSchema._type> {
-  return createProjectSchema.safeParse(input);
+// Validation functions
+export function validateCreateProject(data: unknown) {
+  return createProjectSchema.safeParse(data);
 }
 
-// Validation function for project updates
-export function validateUpdateProject(input: UpdateProjectInput): z.SafeParseReturnType<typeof updateProjectSchema, typeof updateProjectSchema._type> {
-  return updateProjectSchema.safeParse(input);
+export function validateUpdateProject(data: unknown) {
+  return createProjectSchema.partial().safeParse(data);
+}
+
+export function validateStatusTransition(from: ProjectStatus, to: ProjectStatus): boolean {
+  const allowedTransitions = ALLOWED_STATUS_TRANSITIONS[from];
+  return allowedTransitions.includes(to);
+}
+
+export function getAvailableStatusTransitions(currentStatus: ProjectStatus): ProjectStatus[] {
+  return ALLOWED_STATUS_TRANSITIONS[currentStatus] || [];
 } 
